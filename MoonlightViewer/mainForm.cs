@@ -22,12 +22,15 @@ namespace ImageViewer
 
         Bitmap LoadBitmap(string path)
         {
-            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (BinaryReader reader = new BinaryReader(stream))
-            {
-                MemoryStream memoryStream = new MemoryStream(reader.ReadBytes((int)stream.Length));
-                return new Bitmap(memoryStream);
-            }
+            //using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            //using (BinaryReader reader = new BinaryReader(stream))
+            //{
+            //    MemoryStream memoryStream = new MemoryStream(reader.ReadBytes((int)stream.Length));
+            //    return new Bitmap(memoryStream);
+            //}
+
+            MemoryStream ms = new MemoryStream(File.ReadAllBytes(path));
+            return Bitmap.FromStream(ms) as Bitmap;
         }
 
         private void btnListar_Click(object sender, EventArgs e)
