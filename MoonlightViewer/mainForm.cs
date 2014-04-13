@@ -39,9 +39,7 @@ namespace ImageViewer
             if (result == DialogResult.OK)
             {
                 this.files = new List<string>(Directory.GetFiles(fbdialog.SelectedPath, "*.jpg"));
-                pbMain.Image = null;
-                lblSize.Text = "0 de 0";
-                this.index = 0;
+                clear();
                 changePicture();
             } 
         }
@@ -49,7 +47,7 @@ namespace ImageViewer
 
         private void changePicture(Keys key = Keys.Escape) {
 
-            if (this.files == null || this.files.Count <= 0)
+            if (this.files == null || this.files.Count <= 0 || WindowState == FormWindowState.Minimized)
                 return;
 
             switch(key){
@@ -112,16 +110,17 @@ namespace ImageViewer
             changePicture();
         }
 
-        private void MoonlightViewer_Load(object sender, EventArgs e)
+        private void clear() 
         {
-            lblSize.Text = String.Empty;
+            pbMain.Image = null;
+            lblSize.Text = "0 de 0";
+            this.index = 0;
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
             if (this.files == null || this.files.Count <= 0)
                 return;
-
            string path = Path.Combine(fbdialog.SelectedPath, "Removed");
 
            if (!Directory.Exists(path))
@@ -132,9 +131,26 @@ namespace ImageViewer
             Directory.Move(files[index], Path.Combine(path, Path.GetFileName(files[index])));
 
             this.files.RemoveAt(this.index);
+
+            if (this.files.Count == 0)
+                clear();
+            else if(this.files.Count == index)
+                index--;
+
             changePicture();
         }
 
+        private void lblSize_DoubleClick(object sender, EventArgs e)
+        {
+            if(this.files != null && this.files.Count > 0)
+            System.Windows.Forms.Clipboard.SetText(Path.GetFileNameWithoutExtension(files[index]));
+        }
+
+        private void MoonlightViewer_Load(object sender, EventArgs e)
+        {
+            ToolTip t = new ToolTip();
+            t.SetToolTip(this.lblSize, "Double-click to copy the image name.");
+        }
 
 
     }

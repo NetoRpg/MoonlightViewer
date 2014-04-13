@@ -71,6 +71,7 @@
             this.lblSize.TabIndex = 2;
             this.lblSize.Text = "0 de 0";
             this.lblSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSize.DoubleClick += new System.EventHandler(this.lblSize_DoubleClick);
             // 
             // btnRemove
             // 
